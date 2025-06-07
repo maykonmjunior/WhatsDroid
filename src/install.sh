@@ -37,12 +37,16 @@ fi
 echo -e "\n>> Etapa 1.3: Detectando webcam..."
 mkdir -p tmp
 ./src/webcam.sh
-CAM_BUS=$(cat tmp/cam_bus.txt)
-CAM_ADDR=$(cat tmp/cam_addr.txt)
+CAM_VEND=$(cat tmp/cam_vend.txt)
+CAM_PROD=$(cat tmp/cam_prod.txt)
 echo -e "\n>> Etapa 1.4: Detectando microfone..."
 ./src/microphone.sh
 MIC_FREQ=$(cat tmp/mic_freq.txt)
 MIC_CHANNELS=$(cat tmp/mic_channels.txt)
+
+echo "SUBSYSTEM==\"usb\", ATTR{idVendor}==$CAM_VEND, ATTR{idProduct}==$CAM_PROD, MODE=\"0666\", GROUP=\"video\"" | sudo tee  /etc/udev/rules.d/99-webcam.rules
+sudo udevadm control --reload-rules
+sudo udevadm trigger --subsystem-match=usb
 
 
 # Instruções de instalação
@@ -57,9 +61,9 @@ qemu-system-x86_64 \
     -enable-kvm \
     -m "$RAM_MB" \
     -smp "$CPU_CORES" \
-    -machine accel=kvm \
-    -device virtio-net,netdev=net0 \
-    -netdev user,id=net0,hostfwd=tcp::5555-:5555 \
+    -machine type=q35,accel=kvm \
+    -device virtio-net-pci,netdev=mynet \
+    -netdev user,id=mynet,hostfwd=tcp::5555-:5555 \
     -cpu host \
     -device usb-ehci,id=ehci \
     -device usb-tablet \
@@ -67,5 +71,5 @@ qemu-system-x86_64 \
     -audiodev pa,id=snd0,out.frequency=$MIC_FREQ,in.frequency=$MIC_FREQ,out.channels=$MIC_CHANNELS,in.channels=$MIC_CHANNELS \
     -device ich9-intel-hda \
     -device hda-duplex,audiodev=snd0 \
-    -device usb-host,hostbus="$CAM_BUS",hostaddr="$CAM_ADDR" \
+    -device usb-host,vendorid="0x$CAM_VEND",productid="0x$CAM_PROD" \
     -display default,show-cursor=on
