@@ -1,0 +1,15 @@
+{
+    "VM_NAME": "WhatsDroid",
+    "DISK_FORMAT": "qcow2",
+    "APP_NAME": "WhatsApp",
+    "ADB_IP": "127.0.0.1",
+    "ADB_PORT": "5555",
+    "DISK_SIZE": "8G",
+    "RAM_MB": "2048",
+    "CPU_CORES": "6",
+    "DISK_IMAGE": "WhatsDroid.qcow2",
+    "APP_SRC": "https://apkpure.com/",
+    "ISO_FILE": "android-x86_64*.iso",
+    "APP_URL": "https://d.apkpure.com/b/APK/com.whatsapp?version=latest",
+    "ISO_URL": "https://sourceforge.net/projects/android-x86/files/Release%209.0/android-x86_64-9.0-r2-k49.iso/download"
+}

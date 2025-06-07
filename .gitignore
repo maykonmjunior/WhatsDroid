@@ -1,0 +1,8 @@
+*.iso
+/*/.iso
+*.qcow2
+/*/.qcow2
+*.apk
+/*/.apk
+test.sh
+tmp/*
